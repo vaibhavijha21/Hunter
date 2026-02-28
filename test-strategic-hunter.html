@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cognitive Hunter System - Test Interface</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+            margin: 0;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: #ff0000; text-shadow: 0 0 10px #ff0000; margin-bottom: 5px; }
+        h2 { color: #ffaa00; margin-top: 30px; }
+        h3 { color: #00ffff; margin-top: 20px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        
+        .panel {
+            background: #1a1a1a;
+            padding: 20px;
+            border-left: 3px solid #ff0000;
+            margin: 10px 0;
+        }
+        
+        .input-group {
+            margin: 10px 0;
+        }
+        
+        label {
+            display: inline-block;
+            width: 180px;
+            color: #ffaa00;
+        }
+        
+        input, select {
+            background: #0a0a0a;
+            color: #00ff00;
+            border: 1px solid #333;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            width: 200px;
+        }
+        
+        button {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 5px 10px 0;
+            transition: background 0.3s;
+        }
+        
+        button:hover { background: #cc0000; }
+        button.secondary { background: #333; }
+        button.secondary:hover { background: #555; }
+        
+        .output {
+            background: #000;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #333;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        
+        .telemetry {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .telemetry-card {
+            background: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        
+        .telemetry-card .label {
+            color: #888;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .telemetry-card .value {
+            color: #00ff00;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .telemetry-card.critical .value { color: #ff0000; }
+        .telemetry-card.warning .value { color: #ffaa00; }
+        .telemetry-card.success .value { color: #00ff00; }
+        
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .warning { color: #ffaa00; }
+        .info { color: #00ffff; }
+        
+        .stage-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        
+        .stage-OBSERVE { background: #0066cc; color: #fff; }
+        .stage-PRESSURE { background: #ff9900; color: #000; }
+        .stage-DOMINATE { background: #ff3300; color: #fff; }
+        .stage-CLINICAL { background: #cc0000; color: #fff; }
+        
+        .scenario-btn {
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .history {
+            margin-top: 20px;
+        }
+        
+        .history-item {
+            background: #0a0a0a;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 COGNITIVE HUNTER SYSTEM</h1>
+        <p class="info">Production-Ready Psychological Profiling Engine</p>
+        
+        <div class="grid">
+            <!-- Left Panel: Input -->
+            <div>
+                <div class="panel">
+                    <h2>Session Input</h2>
+                    
+                    <div class="input-group">
+                        <label>User ID:</label>
+                        <input type="text" id="userId" value="testUser" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Question ID:</label>
+                        <input type="text" id="questionId" value="q001" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Time Taken (sec):</label>
+                        <input type="number" id="timeTaken" value="450" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Incorrect Attempts:</label>
+                        <input type="number" id="incorrectAttempts" value="3" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Hint Usage:</label>
+                        <input type="number" id="hintUsage" value="2" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Edge Case Failures:</label>
+                        <input type="number" id="edgeCaseFailures" value="2" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Repeated Mistakes:</label>
+                        <input type="number" id="repeatedMistakes" value="1" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Panic Under Timer:</label>
+                        <select id="panicUnderTimer">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="analyzeSession()">🧠 Analyze Session</button>
+                    <button onclick="getUserProfile()" class="secondary">📊 Get Profile</button>
+                    <button onclick="resetUser()" class="secondary">🔄 Reset User</button>
+                </div>
+                
+                <div class="panel">
+                    <h3>Quick Test Scenarios</h3>
+                    
+                    <div class="scenario-btn">
+                        <button onclick="loadScenario('stable')">😎 Stable User</button>
+                    </div>
+                    <div class="scenario-btn">
+                        <button onclick="loadScenario('struggling')">😰 Struggling User</button>
+                    </div>
+                    <div class="scenario-btn">
+                        <button onclick="loadScenario('vulnerable')">🔴 Highly Vulnerable</button>
+                    </div>
+                    <div class="scenario-btn">
+                        <button onclick="loadScenario('improving')">📈 Improving User</button>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">Multi-Session Test</h3>
+                    <button onclick="runMultiSessionTest()">🎯 Run 5-Session Journey</button>
+                </div>
+            </div>
+            
+            <!-- Right Panel: Output -->
+            <div>
+                <div class="panel">
+                    <h2>Telemetry Dashboard</h2>
+                    <div id="telemetry-display" class="telemetry">
+                        <div class="telemetry-card">
+                            <div class="label">Threat Level</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Stage</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">AI Mood</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Pressure</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Adaptation</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Confidence</div>
+                            <div class="value">--</div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: #ff00ff; margin-top: 20px;">🎯 Strategic Layer</h3>
+                    <div id="strategic-display" class="telemetry">
+                        <div class="telemetry-card">
+                            <div class="label">Strategy</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Resistance</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Fatigue</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Overload Risk</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Strategy Confidence</div>
+                            <div class="value">--</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <div class="label">Fairness Status</div>
+                            <div class="value">--</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h2>Analysis Output</h2>
+                    <div id="output" class="output">Ready to analyze...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel history">
+            <h2>Session History</h2>
+            <div id="history"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        let sessionHistory = [];
+
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+            output.innerHTML = `<span class="${className}">[${timestamp}] ${message}</span>`;
+        }
+
+        function updateTelemetry(summary, telemetry) {
+            // Update main telemetry
+            const mainCards = document.querySelectorAll('#telemetry-display .telemetry-card');
+            const mainValues = [
+                summary.threat,
+                summary.stage,
+                summary.mood,
+                summary.pressure,
+                summary.adaptation,
+                summary.confidence
+            ];
+            
+            mainCards.forEach((card, index) => {
+                const valueEl = card.querySelector('.value');
+                valueEl.textContent = mainValues[index];
+                
+                // Color coding
+                card.className = 'telemetry-card';
+                if (index === 0) { // Threat
+                    const threat = parseInt(mainValues[0]);
+                    if (threat >= 75) card.classList.add('critical');
+                    else if (threat >= 50) card.classList.add('warning');
+                    else card.classList.add('success');
+                }
+            });
+            
+            // Update strategic telemetry
+            if (telemetry) {
+                const stratCards = document.querySelectorAll('#strategic-display .telemetry-card');
+                const stratValues = [
+                    telemetry.hunterStrategy?.type?.toUpperCase() || '--',
+                    typeof telemetry.resistanceLevel === 'number' ? telemetry.resistanceLevel : '--',
+                    typeof telemetry.fatigueIndex === 'number' ? telemetry.fatigueIndex : '--',
+                    typeof telemetry.overloadRisk === 'number' ? telemetry.overloadRisk : '--',
+                    typeof telemetry.strategyConfidence === 'number' ? telemetry.strategyConfidence : '--',
+                    telemetry.fairnessStatus || '--'
+                ];
+                
+                stratCards.forEach((card, index) => {
+                    const valueEl = card.querySelector('.value');
+                    valueEl.textContent = stratValues[index];
+                    
+                    // Color coding for strategic metrics
+                    card.className = 'telemetry-card';
+                    if (index === 1) { // Resistance
+                        const resistance = parseInt(stratValues[1]);
+                        if (resistance >= 70) card.classList.add('critical');
+                        else if (resistance >= 40) card.classList.add('warning');
+                        else card.classList.add('success');
+                    } else if (index === 2) { // Fatigue
+                        const fatigue = parseInt(stratValues[2]);
+                        if (fatigue >= 70) card.classList.add('critical');
+                        else if (fatigue >= 40) card.classList.add('warning');
+                        else card.classList.add('success');
+                    } else if (index === 3) { // Overload Risk
+                        const overload = parseInt(stratValues[3]);
+                        if (overload >= 70) card.classList.add('critical');
+                        else if (overload >= 40) card.classList.add('warning');
+                        else card.classList.add('success');
+                    }
+                });
+            }
+        }
+
+        async function analyzeSession() {
+            log('Analyzing session...', 'info');
+            
+            const payload = {
+                userId: document.getElementById('userId').value,
+                questionId: document.getElementById('questionId').value,
+                timeTaken: parseInt(document.getElementById('timeTaken').value),
+                incorrectAttempts: parseInt(document.getElementById('incorrectAttempts').value),
+                hintUsage: parseInt(document.getElementById('hintUsage').value),
+                edgeCaseFailures: parseInt(document.getElementById('edgeCaseFailures').value),
+                repeatedMistakes: parseInt(document.getElementById('repeatedMistakes').value),
+                panicUnderTimer: document.getElementById('panicUnderTimer').value === 'true',
+                conceptTags: ['arrays', 'two-pointer']
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/hunter/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const { analysis, telemetry, telemetrySummary } = data;
+                    
+                    // Update telemetry dashboard
+                    updateTelemetry(telemetrySummary, telemetry);
+                    
+                    // Add to history
+                    sessionHistory.push({
+                        timestamp: new Date().toISOString(),
+                        summary: telemetrySummary,
+                        weaknesses: analysis.profile.weaknessTags,
+                        strategy: telemetry.hunterStrategy?.type || 'unknown'
+                    });
+                    updateHistory();
+                    
+                    // Display detailed output
+                    const output = `✅ ANALYSIS COMPLETE!
+
+🎯 TELEMETRY SUMMARY:
+   Threat: ${telemetrySummary.threat}
+   Stage: ${telemetrySummary.stage}
+   AI Mood: ${telemetrySummary.mood}
+   Pressure: ${telemetrySummary.pressure}
+   Adaptation: ${telemetrySummary.adaptation}
+   Confidence: ${telemetrySummary.confidence}
+
+🎯 STRATEGIC LAYER:
+   Strategy: ${telemetry.hunterStrategy?.type?.toUpperCase()} (${telemetry.hunterStrategy?.description})
+   Objective: ${telemetry.hunterStrategy?.objective}
+   Resistance Level: ${telemetry.resistanceLevel}
+   Fatigue Index: ${telemetry.fatigueIndex}
+   Overload Risk: ${telemetry.overloadRisk}
+   Strategy Confidence: ${telemetry.strategyConfidence}
+   Fairness Status: ${telemetry.fairnessStatus}
+
+🧠 COGNITIVE PROFILE:
+   Weaknesses: ${analysis.profile.weaknessTags.join(', ')}
+   Stability Score: ${analysis.profile.stabilityScore}/100
+   Severity: ${analysis.profile.severityLevel.toUpperCase()}
+
+🔴 VULNERABILITY:
+   Tier: ${analysis.vulnerability.tier.toUpperCase()}
+   Overall Score: ${analysis.vulnerability.overallScore}/100
+   Critical Weaknesses: ${analysis.vulnerability.criticalWeaknesses.join(', ')}
+
+⚡ ESCALATION:
+   Stage: ${analysis.escalation.stage} (Level ${analysis.escalation.stageLevel})
+   Description: ${analysis.escalation.description}
+   Can Escalate: ${analysis.escalation.canEscalate}
+   Sessions Since Change: ${analysis.escalation.sessionsSinceChange}
+
+📊 EXPLOITABILITY:
+   Score: ${analysis.exploitability.score}/100
+   Interpretation: ${analysis.exploitability.interpretation}
+   Trend: ${analysis.exploitability.trend}
+
+🤖 PREDICTABILITY:
+   Level: ${analysis.predictability.predictabilityLevel.toUpperCase()}
+   Classifications: ${analysis.predictability.behaviorClassification.join(', ')}
+
+🧬 META-COGNITIVE:
+   Adaptation Score: ${analysis.metaCognitive.adaptationScore}/100
+   Status: ${analysis.metaCognitive.adaptationStatus}
+   Recovery: ${analysis.metaCognitive.recoveryDetected ? 'YES' : 'NO'}
+   Stabilization: ${analysis.metaCognitive.stabilizationDetected ? 'YES' : 'NO'}
+   Feedback: ${analysis.metaCognitive.feedback}
+
+📚 LONG-TERM PROFILE:
+   Total Sessions: ${analysis.longTermProfile.totalSessions}
+   Improvement Rate: ${analysis.longTermProfile.improvementRate.rate}% (${analysis.longTermProfile.improvementRate.trend})
+   Concept Persistence: ${analysis.longTermProfile.conceptPersistence.score}/100
+   Vulnerability Baseline: ${analysis.longTermProfile.vulnerabilityBaseline}
+
+💬 DIALOGUE:
+   Tone: ${analysis.dialogue.tone}
+   Message: "${analysis.dialogue.message}"
+   Pressure: ${analysis.dialogue.psychologicalPressure}/100
+   Tactics: ${analysis.dialogue.manipulationTactic.join(', ')}
+
+🎯 ADAPTIVE QUESTION:
+   ${analysis.adaptiveQuestion.title} (${analysis.adaptiveQuestion.difficulty})
+   Trap Intensity: ${analysis.adaptiveQuestion.trapMetadata.intensity.toUpperCase()}
+   Match Score: ${analysis.adaptiveQuestion.trapMetadata.matchScore}
+   Strategy Type: ${analysis.adaptiveQuestion.trapMetadata.strategyType?.toUpperCase() || 'N/A'}
+   Strategic Alignment: ${analysis.adaptiveQuestion.trapMetadata.strategicAlignment || 'N/A'}
+
+📊 STRATEGIC INTENT:
+   Type: ${analysis.strategicIntent?.strategyType || 'N/A'}
+   Objective: ${analysis.strategicIntent?.objective || 'N/A'}
+   Confidence: ${analysis.strategicIntent?.confidence || 'N/A'}
+
+🛡️ COUNTER-ADAPTATION:
+   Resistance Level: ${analysis.counterAdaptation?.resistanceLevel || 'N/A'}
+   Trap Immunity: ${analysis.counterAdaptation?.trapImmunity || 'N/A'}
+   Manipulation Sensitivity: ${analysis.counterAdaptation?.manipulationSensitivity || 'N/A'}
+   Pivot Recommended: ${analysis.counterAdaptation?.pivotRecommended ? 'YES' : 'NO'}
+
+⚖️ COGNITIVE FAIRNESS:
+   Fatigue Index: ${analysis.fairnessGovernor?.pressureFatigueIndex || 'N/A'}
+   Overload Risk: ${analysis.fairnessGovernor?.cognitiveOverloadRisk || 'N/A'}
+   Status: ${analysis.fairnessGovernor?.status || 'N/A'}
+   Recovery Window: ${analysis.fairnessGovernor?.recoveryWindowRecommended ? 'YES' : 'NO'}
+
+📚 STRATEGY HISTORY:
+   Total Strategies Used: ${analysis.strategyHistory?.totalStrategies || 'N/A'}
+   Most Effective: ${analysis.strategyHistory?.mostEffective || 'N/A'}
+   Recent Success Rate: ${analysis.strategyHistory?.recentPerformance?.recentSuccessRate || 'N/A'}%
+
+⏱️ SIMULATION TIMELINE:
+   Current Tick: ${analysis.timeline?.currentTick || 'N/A'}
+   Phase: ${analysis.timeline?.currentPhase?.toUpperCase() || 'N/A'}
+   Ticks in Phase: ${analysis.timeline?.ticksInCurrentPhase || 'N/A'}
+   Phase Description: ${analysis.timeline?.phaseMetadata?.description || 'N/A'}
+   Last Transition: ${analysis.timeline?.lastTransition ? `${analysis.timeline.lastTransition.from} → ${analysis.timeline.lastTransition.to} (${analysis.timeline.lastTransition.reason})` : 'None'}
+
+📊 PSYCHOLOGICAL MOMENTUM:
+   Momentum Index: ${analysis.momentum?.momentumIndex || 'N/A'}/100
+   Direction: ${analysis.momentum?.direction?.toUpperCase() || 'N/A'}
+   Trend: ${analysis.momentum?.trend || 'N/A'}
+   Pressure Momentum: ${analysis.momentum?.pressureMomentum || 'N/A'}
+   Adaptation Momentum: ${analysis.momentum?.adaptationMomentum || 'N/A'}
+   Confidence: ${analysis.momentum?.confidence || 'N/A'}%
+
+🎭 HUNTER PERSONA:
+   Type: ${analysis.persona?.type?.toUpperCase() || 'N/A'}
+   Name: ${analysis.persona?.name || 'N/A'}
+   Current Mood: ${analysis.persona?.currentMood || 'N/A'}
+   Frustration: ${analysis.persona?.frustration || 'N/A'}/100
+   Confidence: ${analysis.persona?.confidence || 'N/A'}/100
+   Adaptations: ${analysis.persona?.adaptations || 'N/A'}
+   Traits: Patience ${analysis.persona?.traits?.patience || 'N/A'}, Aggression ${analysis.persona?.traits?.aggression || 'N/A'}
+
+📸 SNAPSHOT:
+   Snapshot ID: ${analysis.snapshot?.snapshotId || 'N/A'}
+   Tick: ${analysis.snapshot?.tick || 'N/A'}
+
+🛡️ STABILITY GUARDS:
+   Guards Active: ${analysis.stabilityGuards.guardsApplied.exploitabilityCapped || analysis.stabilityGuards.guardsApplied.escalationBlocked ? 'YES' : 'NO'}
+   Exploitability Capped: ${analysis.stabilityGuards.guardsApplied.exploitabilityCapped}
+   Escalation Blocked: ${analysis.stabilityGuards.guardsApplied.escalationBlocked}
+
+Full Response:
+${JSON.stringify(data, null, 2)}`;
+                    
+                    log(output, 'success');
+                } else {
+                    log(`❌ ERROR: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function getUserProfile() {
+            const userId = document.getElementById('userId').value;
+            log(`Fetching profile for ${userId}...`, 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/hunter/profile/${userId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const profile = data.profile;
+                    const output = `✅ USER PROFILE
+
+User ID: ${profile.userId}
+Total Sessions: ${profile.totalSessions}
+
+📈 IMPROVEMENT:
+   Rate: ${profile.improvementRate.rate}%
+   Trend: ${profile.improvementRate.trend}
+
+🧠 CONCEPT PERSISTENCE:
+   Score: ${profile.conceptPersistence.score}/100
+   Status: ${profile.conceptPersistence.status}
+
+🎯 VULNERABILITY BASELINE: ${profile.vulnerabilityBaseline}
+
+📊 RECENT PERFORMANCE:
+${profile.recentPerformance ? `   Avg Time: ${profile.recentPerformance.avgTimeTaken}s
+   Avg Attempts: ${profile.recentPerformance.avgIncorrectAttempts}
+   Panic Rate: ${profile.recentPerformance.panicRate}%` : '   No data yet'}
+
+🏆 CONCEPT MASTERY:
+   Mastered: ${profile.conceptMastery.mastered.length}
+   Learning: ${profile.conceptMastery.learning.length}
+   Struggling: ${profile.conceptMastery.struggling.length}
+
+Full Profile:
+${JSON.stringify(data, null, 2)}`;
+                    
+                    log(output, 'success');
+                } else {
+                    log(`❌ ERROR: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function resetUser() {
+            const userId = document.getElementById('userId').value;
+            if (!confirm(`Reset all data for user ${userId}?`)) return;
+            
+            log(`Resetting user ${userId}...`, 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/hunter/reset/${userId}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    sessionHistory = [];
+                    updateHistory();
+                    updateTelemetry(
+                        { threat: '--', stage: '--', mood: '--', pressure: '--', adaptation: '--', confidence: '--' },
+                        { hunterStrategy: { type: '--' }, resistanceLevel: '--', fatigueIndex: '--', overloadRisk: '--', strategyConfidence: '--', fairnessStatus: '--' }
+                    );
+                    log(`✅ ${data.message}`, 'success');
+                } else {
+                    log(`❌ ERROR: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        function loadScenario(type) {
+            const scenarios = {
+                stable: { timeTaken: 300, incorrectAttempts: 0, hintUsage: 0, edgeCaseFailures: 0, repeatedMistakes: 0, panicUnderTimer: 'false' },
+                struggling: { timeTaken: 500, incorrectAttempts: 3, hintUsage: 2, edgeCaseFailures: 1, repeatedMistakes: 1, panicUnderTimer: 'true' },
+                vulnerable: { timeTaken: 700, incorrectAttempts: 5, hintUsage: 3, edgeCaseFailures: 3, repeatedMistakes: 2, panicUnderTimer: 'true' },
+                improving: { timeTaken: 350, incorrectAttempts: 1, hintUsage: 0, edgeCaseFailures: 0, repeatedMistakes: 0, panicUnderTimer: 'false' }
+            };
+            
+            const scenario = scenarios[type];
+            document.getElementById('timeTaken').value = scenario.timeTaken;
+            document.getElementById('incorrectAttempts').value = scenario.incorrectAttempts;
+            document.getElementById('hintUsage').value = scenario.hintUsage;
+            document.getElementById('edgeCaseFailures').value = scenario.edgeCaseFailures;
+            document.getElementById('repeatedMistakes').value = scenario.repeatedMistakes;
+            document.getElementById('panicUnderTimer').value = scenario.panicUnderTimer;
+            
+            log(`Loaded ${type} scenario`, 'info');
+        }
+
+        async function runMultiSessionTest() {
+            log('Running 5-session journey test...', 'info');
+            
+            const sessions = [
+                { timeTaken: 450, incorrectAttempts: 3, hintUsage: 2, edgeCaseFailures: 2, repeatedMistakes: 1, panicUnderTimer: true },
+                { timeTaken: 500, incorrectAttempts: 4, hintUsage: 2, edgeCaseFailures: 2, repeatedMistakes: 1, panicUnderTimer: true },
+                { timeTaken: 550, incorrectAttempts: 4, hintUsage: 3, edgeCaseFailures: 3, repeatedMistakes: 2, panicUnderTimer: true },
+                { timeTaken: 400, incorrectAttempts: 2, hintUsage: 1, edgeCaseFailures: 1, repeatedMistakes: 0, panicUnderTimer: false },
+                { timeTaken: 350, incorrectAttempts: 1, hintUsage: 0, edgeCaseFailures: 0, repeatedMistakes: 0, panicUnderTimer: false }
+            ];
+            
+            for (let i = 0; i < sessions.length; i++) {
+                const session = sessions[i];
+                document.getElementById('questionId').value = `q00${i + 1}`;
+                document.getElementById('timeTaken').value = session.timeTaken;
+                document.getElementById('incorrectAttempts').value = session.incorrectAttempts;
+                document.getElementById('hintUsage').value = session.hintUsage;
+                document.getElementById('edgeCaseFailures').value = session.edgeCaseFailures;
+                document.getElementById('repeatedMistakes').value = session.repeatedMistakes;
+                document.getElementById('panicUnderTimer').value = session.panicUnderTimer;
+                
+                await analyzeSession();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
+            log('✅ Multi-session test complete! Check history below.', 'success');
+        }
+
+        function updateHistory() {
+            const historyEl = document.getElementById('history');
+            if (sessionHistory.length === 0) {
+                historyEl.innerHTML = '<p class="info">No sessions yet</p>';
+                return;
+            }
+            
+            historyEl.innerHTML = sessionHistory.map((session, index) => `
+                <div class="history-item">
+                    <strong>Session ${index + 1}</strong> - ${new Date(session.timestamp).toLocaleTimeString()}
+                    <br>
+                    Stage: <span class="stage-indicator stage-${session.summary.stage}">${session.summary.stage}</span>
+                    Strategy: <span style="color: #ff00ff; font-weight: bold;">${session.strategy.toUpperCase()}</span>
+                    <br>
+                    Threat: ${session.summary.threat} | 
+                    Mood: ${session.summary.mood} | 
+                    Pressure: ${session.summary.pressure}
+                    <br>
+                    Weaknesses: ${session.weaknesses.join(', ')}
+                </div>
+            `).reverse().join('');
+        }
+
+        // Initialize
+        window.onload = () => {
+            log('Ready to test Cognitive Hunter System', 'info');
+        };
+    </script>
+</body>
+</html>

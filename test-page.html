@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hunter Protocol - Test Interface</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+        h2 { color: #ffaa00; }
+        .test-section {
+            background: #1a1a1a;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 3px solid #ff0000;
+        }
+        button {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover { background: #cc0000; }
+        .output {
+            background: #000;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #333;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 12px;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #00ffff; }
+        input, select {
+            background: #1a1a1a;
+            color: #00ff00;
+            border: 1px solid #333;
+            padding: 8px;
+            margin: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        label {
+            display: inline-block;
+            width: 180px;
+            color: #ffaa00;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 THE HUNTER PROTOCOL - TEST INTERFACE</h1>
+    <p class="info">Intelligence Layer Testing Console</p>
+
+    <!-- Test 1: Health Check -->
+    <div class="test-section">
+        <h2>Test 1: Health Check</h2>
+        <button onclick="testHealth()">🔍 Check Server Health</button>
+        <div id="health-output" class="output"></div>
+    </div>
+
+    <!-- Test 2: Session Analysis -->
+    <div class="test-section">
+        <h2>Test 2: Session Analysis (Psychological Profiling)</h2>
+        
+        <div class="input-group">
+            <label>User ID:</label>
+            <input type="text" id="userId" value="testUser123" />
+        </div>
+        <div class="input-group">
+            <label>Question ID:</label>
+            <input type="text" id="questionId" value="q001" />
+        </div>
+        <div class="input-group">
+            <label>Time Taken (seconds):</label>
+            <input type="number" id="timeTaken" value="450" />
+        </div>
+        <div class="input-group">
+            <label>Incorrect Attempts:</label>
+            <input type="number" id="incorrectAttempts" value="3" />
+        </div>
+        <div class="input-group">
+            <label>Hint Usage:</label>
+            <input type="number" id="hintUsage" value="2" />
+        </div>
+        <div class="input-group">
+            <label>Edge Case Failures:</label>
+            <input type="number" id="edgeCaseFailures" value="2" />
+        </div>
+        <div class="input-group">
+            <label>Repeated Mistakes:</label>
+            <input type="number" id="repeatedMistakes" value="1" />
+        </div>
+        <div class="input-group">
+            <label>Panic Under Timer:</label>
+            <select id="panicUnderTimer">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+        
+        <button onclick="testSessionAnalysis()">🧠 Analyze Session</button>
+        <button onclick="testStableUser()">😎 Test Stable User</button>
+        <button onclick="testVulnerableUser()">😰 Test Vulnerable User</button>
+        
+        <div id="session-output" class="output"></div>
+    </div>
+
+    <!-- Test 3: Adaptive Question -->
+    <div class="test-section">
+        <h2>Test 3: Adaptive Question Selection</h2>
+        
+        <div class="input-group">
+            <label>Weakness Tags:</label>
+            <input type="text" id="weaknessTags" value="time-pressure,edge-case-weak" style="width: 300px;" />
+            <span class="info">(comma-separated)</span>
+        </div>
+        <div class="input-group">
+            <label>Previous Questions:</label>
+            <input type="text" id="previousQuestions" value="q001,q002" style="width: 300px;" />
+            <span class="info">(comma-separated)</span>
+        </div>
+        <div class="input-group">
+            <label>Exploitability Score:</label>
+            <input type="number" id="exploitabilityScore" value="68" min="0" max="100" />
+        </div>
+        <div class="input-group">
+            <label>Vulnerability Tier:</label>
+            <select id="vulnerabilityTier">
+                <option value="low">Low</option>
+                <option value="moderate" selected>Moderate</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+            </select>
+        </div>
+        
+        <button onclick="testAdaptiveQuestion()">🎯 Get Adaptive Question</button>
+        
+        <div id="question-output" class="output"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+
+        function log(elementId, message, type = 'info') {
+            const output = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            output.innerHTML = `<span class="${className}">[${timestamp}] ${message}</span>`;
+        }
+
+        async function testHealth() {
+            log('health-output', 'Testing server health...', 'info');
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                log('health-output', 
+                    `✅ SUCCESS!\n\n${JSON.stringify(data, null, 2)}`, 
+                    'success'
+                );
+            } catch (error) {
+                log('health-output', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSessionAnalysis() {
+            log('session-output', 'Analyzing session...', 'info');
+            
+            const payload = {
+                userId: document.getElementById('userId').value,
+                questionId: document.getElementById('questionId').value,
+                timeTaken: parseInt(document.getElementById('timeTaken').value),
+                incorrectAttempts: parseInt(document.getElementById('incorrectAttempts').value),
+                hintUsage: parseInt(document.getElementById('hintUsage').value),
+                edgeCaseFailures: parseInt(document.getElementById('edgeCaseFailures').value),
+                repeatedMistakes: parseInt(document.getElementById('repeatedMistakes').value),
+                panicUnderTimer: document.getElementById('panicUnderTimer').value === 'true',
+                conceptTags: ['arrays', 'two-pointer']
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/session/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const analysis = data.analysis;
+                    log('session-output', 
+                        `✅ ANALYSIS COMPLETE!\n\n` +
+                        `🎯 EXPLOITABILITY: ${analysis.exploitability.score}/100 (${analysis.exploitability.interpretation})\n` +
+                        `🔴 VULNERABILITY TIER: ${analysis.vulnerability.tier.toUpperCase()}\n` +
+                        `🧠 WEAKNESSES: ${analysis.profile.weaknessTags.join(', ')}\n` +
+                        `📊 STABILITY SCORE: ${analysis.profile.stabilityScore}/100\n` +
+                        `⚠️  SEVERITY: ${analysis.profile.severityLevel.toUpperCase()}\n` +
+                        `🤖 BEHAVIOR: ${analysis.predictability.behaviorClassification.join(', ')}\n` +
+                        `🎭 DIALOGUE TONE: ${analysis.dialogue.tone}\n` +
+                        `💬 MESSAGE: "${analysis.dialogue.message}"\n` +
+                        `🔥 PSYCHOLOGICAL PRESSURE: ${analysis.dialogue.psychologicalPressure}/100\n` +
+                        `⚔️  MANIPULATION TACTIC: ${analysis.dialogue.manipulationTactic.join(', ')}\n\n` +
+                        `Full Response:\n${JSON.stringify(data, null, 2)}`,
+                        'success'
+                    );
+                } else {
+                    log('session-output', `❌ ERROR: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log('session-output', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testStableUser() {
+            document.getElementById('timeTaken').value = 300;
+            document.getElementById('incorrectAttempts').value = 0;
+            document.getElementById('hintUsage').value = 0;
+            document.getElementById('edgeCaseFailures').value = 0;
+            document.getElementById('repeatedMistakes').value = 0;
+            document.getElementById('panicUnderTimer').value = 'false';
+            await testSessionAnalysis();
+        }
+
+        async function testVulnerableUser() {
+            document.getElementById('timeTaken').value = 600;
+            document.getElementById('incorrectAttempts').value = 5;
+            document.getElementById('hintUsage').value = 3;
+            document.getElementById('edgeCaseFailures').value = 3;
+            document.getElementById('repeatedMistakes').value = 2;
+            document.getElementById('panicUnderTimer').value = 'true';
+            await testSessionAnalysis();
+        }
+
+        async function testAdaptiveQuestion() {
+            log('question-output', 'Fetching adaptive question...', 'info');
+            
+            const weaknessTags = document.getElementById('weaknessTags').value;
+            const previousQuestions = document.getElementById('previousQuestions').value;
+            const exploitabilityScore = document.getElementById('exploitabilityScore').value;
+            const vulnerabilityTier = document.getElementById('vulnerabilityTier').value;
+
+            const url = `${API_BASE}/question/adaptive?` +
+                `weaknessTags=${weaknessTags}&` +
+                `previousQuestions=${previousQuestions}&` +
+                `exploitabilityScore=${exploitabilityScore}&` +
+                `vulnerabilityTier=${vulnerabilityTier}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const q = data.question;
+                    log('question-output', 
+                        `✅ QUESTION SELECTED!\n\n` +
+                        `📝 ID: ${q.id}\n` +
+                        `📌 TITLE: ${q.title}\n` +
+                        `⚡ DIFFICULTY: ${q.difficulty.toUpperCase()}\n` +
+                        `🏷️  TAGS: ${q.tags.join(', ')}\n` +
+                        `⏱️  TIME LIMIT: ${q.timeLimit}s\n` +
+                        `📖 DESCRIPTION: ${q.description}\n\n` +
+                        `🎯 TRAP METADATA:\n` +
+                        `   Intensity: ${q.trapMetadata.intensity.toUpperCase()}\n` +
+                        `   Match Score: ${q.trapMetadata.matchScore}\n` +
+                        `   Target Weaknesses: ${q.trapMetadata.targetWeaknesses.join(', ')}\n` +
+                        `   Exploitability Threshold: ${q.trapMetadata.exploitabilityThreshold}\n\n` +
+                        `Full Response:\n${JSON.stringify(data, null, 2)}`,
+                        'success'
+                    );
+                } else {
+                    log('question-output', `❌ ERROR: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log('question-output', `❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-test on load
+        window.onload = () => {
+            log('health-output', 'Ready to test. Click button to check server health.', 'info');
+            log('session-output', 'Ready to analyze. Adjust parameters and click button.', 'info');
+            log('question-output', 'Ready to fetch questions. Adjust parameters and click button.', 'info');
+        };
+    </script>
+</body>
+</html>
